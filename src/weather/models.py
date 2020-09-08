@@ -15,6 +15,10 @@ class Parameter(models.Model):
     name = models.CharField(max_length=25)
     location = models.URLField(max_length=200, blank=True)
     unit = models.CharField(max_length=10)
-    values = models.JSONField
+    values = models.JSONField(default=dict)
+    _city = models.ForeignKey(City, on_delete=models.CASCADE)
+
     def __str__(self):
         return self.name
+
+
