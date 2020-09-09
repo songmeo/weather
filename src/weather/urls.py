@@ -1,12 +1,16 @@
 from django.urls import path, include
 from .views import CityViewSet, ParameterViewSet
-from rest_framework.routers import DefaultRouter
+from rest_framework_nested import routers
 
 app_name = "weather"
 
-router = DefaultRouter()
-router.register('locations', CityViewSet)
-router.register('parameters', ParameterViewSet)
+router = routers.DefaultRouter()
+router.register(r'locations', CityViewSet)
+
+locations_router = routers.NestedDefaultRouter(router, r'locations', lookup='location')
+locations_router.register(r'parameters', ParameterViewSet, basename='location-parameters')
+
 urlpatterns = [
     path("", include(router.urls)),
+    path("", include(locations_router.urls))
 ]
