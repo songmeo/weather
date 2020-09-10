@@ -4,7 +4,7 @@ class City(models.Model):
     ref = models.IntegerField(blank=True, unique=True)
     name = models.CharField(max_length=25, unique=True)
     description = models.CharField(max_length=64, blank=True)
-    parameters = models.URLField(max_length=200, blank=True)
+    #parameters = models.URLField(max_length=200, blank=True)
     #aggregation = models.JSONField(default=dict, blank=True)
     class Meta:
         verbose_name_plural = 'cities'

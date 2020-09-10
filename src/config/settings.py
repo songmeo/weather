@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     #first party
     'weather.apps.WeatherConfig',
     #third party
-    'rest_framework',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
