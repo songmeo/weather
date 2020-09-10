@@ -3,12 +3,12 @@ from .models import City, Parameter
 from .helper import add_city
 
 class CitySerializer(serializers.ModelSerializer):
-    parameters = serializers.HyperlinkedRelatedField(read_only=True, view_name='Parameters')
+    parameters = serializers.HyperlinkedRelatedField(read_only=True, view_name='location-parameters-list')
     class Meta:
         model = City
-        fields = '__all__'
-    def to_representation(self, obj):
-        return add_city(self, obj)
+        fields = ('id', 'name', 'description', 'longitude', 'latitude', 'parameters')
+    def create(self, validated_data):
+        return add_city(validated_data)
 
 class ParameterSerializer(serializers.ModelSerializer):
     class Meta:
