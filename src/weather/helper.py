@@ -30,7 +30,6 @@ def add_city(obj):
     )
     city.save()
     parameters_data = take_parameters_data(city).json()
-    print(parameters_data)
     for f in FIELDS.split(','):
         vals = []
         for p in parameters_data:
@@ -46,3 +45,11 @@ def add_city(obj):
         )
         parameter.save()
     return city
+
+def aggregate(value):
+    values = [d['value'] for d in value.values if d['value'] is not None]
+    if len(values) == 0:
+        avg = None
+    else:
+        avg = round(sum(values) / len(values), 2)
+    return avg, min(values, default=None), max(values, default=None)

@@ -11,11 +11,10 @@ class City(models.Model):
     def __str__(self):
         return self.name
         
-#e.g temperature, humidity
 class Parameter(models.Model):
     name = models.CharField(max_length=25)
     unit = models.CharField(max_length=10, blank=True)
-    values = models.JSONField(default=list)
+    values = models.JSONField(default=list, blank=True)
     _city = models.ForeignKey(City, on_delete=models.CASCADE, related_name="parameters")
     def __str__(self):
         return self.name
