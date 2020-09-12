@@ -1,6 +1,6 @@
 import json, datetime
 import requests
-from .models import City, Parameter
+from .models import Location, Parameter
 from config.secret import apikey
 
 API_URL = 'https://api.climacell.co/v3/weather/historical/station'
@@ -12,24 +12,14 @@ querystring = {
     'fields': FIELDS
 }
 
-def take_parameters_data(city):
-    querystring['lat'] = city.latitude
-    querystring['lon'] = city.longitude
+def take_parameters_data(location):
+    querystring['lat'] = location.latitude
+    querystring['lon'] = location.longitude
     response = requests.get(API_URL, params=querystring)
     return response
 
-def add_city(obj):
-    with open('weather/static/cities.json') as fd:
-        cities = json.load(fd)
-    city_location = [c for c in cities if(c['name'] == obj['name'])][0]
-    city = City(
-        name=city_location['name'],
-        description=obj['description'],
-        longitude=float(city_location['lng']),
-        latitude=float(city_location['lat'])
-    )
-    city.save()
-    parameters_data = take_parameters_data(city).json()
+def add_parameters(location):
+    parameters_data = take_parameters_data(location).json()
     for f in FIELDS.split(','):
         vals = []
         for p in parameters_data:
@@ -41,10 +31,23 @@ def add_city(obj):
             name=f,
             unit=parameters_data[0][f]['units'],
             values=vals,
-            _city=city
+            _location=location
         )
         parameter.save()
-    return city
+    
+def add_location(obj):
+    with open('weather/static/cities.json') as fd:
+        cities = json.load(fd)
+    loc = [c for c in cities if(c['name'] == obj['name'])][0]
+    location = Location(
+        name=loc['name'],
+        description=obj['description'],
+        longitude=float(loc['lng']),
+        latitude=float(loc['lat'])
+    )
+    location.save()
+    add_parameters(location)
+    return location
 
 def aggregate(value):
     values = [d['value'] for d in value.values if d['value'] is not None]
