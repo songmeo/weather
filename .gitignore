@@ -130,3 +130,6 @@ dmypy.json
 
 #django secret
 src/config/secret.py
+
+#venv
+env/*

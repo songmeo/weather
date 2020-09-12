@@ -30,13 +30,16 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'weather',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #first party
+    'weather.apps.WeatherConfig',
+    #third party
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
