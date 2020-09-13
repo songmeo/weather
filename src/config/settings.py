@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 #from .secret import *
 from pathlib import Path
 import os
+import rest_framework
 
 SECRET_KEY = os.environ['SECRET_KEY']
 
@@ -125,3 +126,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+'''
+STATIC_ROOT = os.path.join(Path(rest_framework.__file__).parent)
+#STATIC_ROOT = str(Path(rest_framework.__file__).parent)
+
+'''
