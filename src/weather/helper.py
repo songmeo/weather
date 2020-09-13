@@ -1,12 +1,13 @@
 import json, datetime
-import requests
+import requests, os
 from .models import Location, Parameter
-from config.secret import apikey
+#from config.secret import apikey
 
+APIKEY = os.environ['API_KEY']
 API_URL = 'https://api.climacell.co/v3/weather/historical/station'
 FIELDS = "temp,precipitation,feels_like,dewpoint,wind_speed,wind_gust,baro_pressure,visibility,humidity,wind_direction,cloud_cover,cloud_ceiling,cloud_base"
 querystring = {
-    'apikey': apikey,
+    'apikey': APIKEY,
     'start_time': (datetime.datetime.now() - datetime.timedelta(days=1)).isoformat(),
     'end_time': datetime.datetime.now(),
     'fields': FIELDS

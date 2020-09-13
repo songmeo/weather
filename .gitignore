@@ -129,7 +129,7 @@ dmypy.json
 .pyre/
 
 #django secret
-#src/config/secret.py
+src/config/secret.py
 
 #venv
 env/*
