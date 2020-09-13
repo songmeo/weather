@@ -37,7 +37,7 @@ def add_parameters(location):
         parameter.save()
     
 def add_location(obj):
-    with open('static/cities.json') as fd:
+    with open('weather/static/cities.json') as fd:
         cities = json.load(fd)
     loc = [c for c in cities if(c['name'] == obj['name'])][0]
     location = Location(
