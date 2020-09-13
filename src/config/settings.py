@@ -126,8 +126,3 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-'''
-STATIC_ROOT = os.path.join(Path(rest_framework.__file__).parent)
-#STATIC_ROOT = str(Path(rest_framework.__file__).parent)
-
-'''
