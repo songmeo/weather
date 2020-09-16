@@ -1,6 +1,7 @@
 from django.urls import path, include
-from .views import LocationViewSet, ParameterViewSet
+#from .views import LocationViewSet, ParameterViewSet
 from rest_framework_nested import routers
+from .views import LocationViewSet, ParameterViewSet
 
 app_name = "weather"
 
@@ -14,3 +15,9 @@ urlpatterns = [
     path("", include(router.urls)),
     path("", include(locations_router.urls))
 ]
+'''
+urlpatterns = [
+    path("locations/", LocationView.as_view())
+    #path("locations/<int:pk>", location_detail)
+]
+'''
