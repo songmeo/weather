@@ -8,15 +8,8 @@ class Location(models.Model):
     latitude = models.FloatField(blank=True, null=True)
 
     class Meta:
-        verbose_name_plural = 'cities'
+        verbose_name_plural = 'locations'
 
-    '''
-    def save(self, *args, **kwargs):
-        is_new = True if not self.id else False
-        super(Location, self).save(*args, **kwargs)
-        if is_new:
-            para = Parameter(
-    '''
     def __str__(self):
         return self.name
 

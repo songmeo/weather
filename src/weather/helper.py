@@ -4,6 +4,7 @@ from .models import Location, Parameter
 
 APIKEY = os.environ['API_KEY']
 API_URL = 'https://api.climacell.co/v3/weather/historical/station'
+
 #feels_like,dewpoint,wind_speed,wind_gust,baro_pressure,wind_direction,cloud_cover,cloud_ceiling,cloud_base,visibility
 FIELDS = "temp,precipitation,humidity"
 querystring = {
@@ -32,6 +33,10 @@ def get_parameter_values(location):
             v['value'] = p[f]['value']
             values.append(v)
     return values
+'''
+def update_location(location):
+    return location
+'''
 
 def add_location(loc):
     location = [c for c in CITIES if(c['name'] == loc['name'])][0]
