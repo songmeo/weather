@@ -8,30 +8,6 @@ from rest_framework.decorators import action
 from rest_framework import status
 from rest_framework.views import APIView 
 from .helper import get_parameter_values
-'''
-@api_view(['GET', 'POST'])
-def location_list(request):
-    if(m)
-    locations = Location.objects.all()
-    serializer = LocationSerializer(locations, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def location_detail(request, pk):
-    try:
-        loc = Location.objects.get(pk=pk)
-    except loc.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    serializer = LocationSerializer(loc)
-    return Response(serializer.data)
-class LocationView(APIView):
-    def get(self, request):
-        locations = Location.objects.all()
-        serializer = LocationSerializer(locations, many=True)
-        return Response(serializer.data)
-    def post(self, request):
-        return self.create(request)
-'''
 
 class LocationViewSet(viewsets.ModelViewSet):
     queryset = Location.objects.all()
@@ -41,3 +17,8 @@ class ParameterViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Parameter.objects.filter(_location=self.kwargs['location_pk'])
     serializer_class = ParameterSerializer
+
+    def get_serializer_context(self):
+        context = super(ParameterViewSet, self).get_serializer_context()
+        context.update({"request": self.request})
+        return context

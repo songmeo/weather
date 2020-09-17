@@ -15,9 +15,3 @@ urlpatterns = [
     path("", include(router.urls)),
     path("", include(locations_router.urls))
 ]
-'''
-urlpatterns = [
-    path("locations/", LocationView.as_view())
-    #path("locations/<int:pk>", location_detail)
-]
-'''
