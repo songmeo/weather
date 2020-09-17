@@ -22,6 +22,12 @@ class ParameterSerializer(serializers.ModelSerializer):
 class AggregationField(serializers.RelatedField):
     def to_representation(self, obj):
         aggregation = aggregate(obj.values)
+        if 'message' in aggregation:
+            return {
+                'id': obj.id,
+                'name': obj.name,
+                'message': aggregation['message']
+            }
         return {
             'id': obj.id,
             'name': obj.name,
@@ -40,7 +46,6 @@ class LocationSerializer(serializers.ModelSerializer):
         paras = obj.parameters.all()
         for p in paras:
             aggregations.append(aggregate(p.values))
-        print(aggregations)
         return aggregations
     def create(self, obj):
         return add_location(obj)

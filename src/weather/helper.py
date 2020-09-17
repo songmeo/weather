@@ -1,5 +1,6 @@
-import json, datetime
+import json, datetime, dateutil.parser
 import requests, os
+from django.http import Http404
 from .models import Location, Parameter
 
 APIKEY = os.environ['API_KEY']
@@ -35,12 +36,15 @@ def get_parameter_values(location):
     return values
 
 def add_location(loc):
-    location = [c for c in CITIES if(c['name'] == loc['name'])][0]
+    try:
+        location = [c for c in CITIES if(c['name'] == loc['name'])][0]
+    except:
+        raise Http404("City not found")
     location = Location.objects.create(name=loc['name'],
-                                        description=loc['description'],
-                                        longitude=float(location['lng']),
-                                        latitude=float(location['lat'])
-                                    )
+                                       description=loc['description'],
+                                       longitude=float(location['lng']),
+                                       latitude=float(location['lat'])
+                                      )
     fields = "temp,precipitation,humidity"
     for field in fields.split(','):
         add_parameter(location, field)
@@ -58,8 +62,10 @@ def add_parameter(location_obj, field):
     values = []
     for p in data:
         v = {}
-        v['observation_time'] = p['observation_time']['value']
+        if p[field]['value'] is None:
+            continue
         v['value'] = p[field]['value']
+        v['observation_time'] = p['observation_time']['value']
         values.append(v)
     para = Parameter.objects.create(_location=location_obj,
                                     values=values,
@@ -70,9 +76,36 @@ def add_parameter(location_obj, field):
 
 def aggregate(value):
     values = [d['value'] for d in value if d['value'] is not None]
-    data = {
-        'min': min(values, default=None),
-        'max': max(values, default=None),
-        'avg': round(sum(values) / len(values), 2) if values else None 
-    }
+    if values:
+        data = {
+            'min': min(values, default=None),
+            'max': max(values, default=None),
+            'avg': round(sum(values) / len(values), 2) if values else None 
+        }
+    else:
+        data = {
+            'message': 'no data available'
+        }
     return data
+
+def update_parameter(para):
+    values = para.values
+    if values:
+        last_update_time = values[-1]['observation_time']
+        now = datetime.datetime.now(datetime.timezone.utc)
+        interval = now - dateutil.parser.isoparse(last_update_time)
+        if interval < datetime.timedelta(hours=6):
+            return
+    loc = para._location
+    field = para.name
+    data = get_parameter_value(loc.latitude, loc.longitude, field)
+    values = []
+    for p in data:
+        v = {}
+        if p[field]['value'] is None:
+            continue
+        v['value'] = p[field]['value']
+        v['observation_time'] = p['observation_time']['value']
+        values.append(v)
+    para.values = values
+    para.save()
