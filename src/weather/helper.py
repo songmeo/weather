@@ -1,8 +1,6 @@
 import json, datetime
 import requests, os
 from .models import Location, Parameter
-#from .serializers import ParameterSerializer
-#from config.secret import apikey
 
 APIKEY = os.environ['API_KEY']
 API_URL = 'https://api.climacell.co/v3/weather/historical/station'
@@ -35,51 +33,39 @@ def get_parameter_values(location):
             values.append(v)
     return values
 
-def add_location(obj):
-    loc = [c for c in CITIES if(c['name'] == obj['name'])][0]
-    location = Location(
-        name=loc['name'],
-        description=obj['description'],
-        longitude=float(loc['lng']),
-        latitude=float(loc['lat'])
-    )
-    location.save()
-
-    #add parameters
+def add_location(loc):
+    location = [c for c in CITIES if(c['name'] == loc['name'])][0]
+    location = Location.objects.create(name=loc['name'],
+                                        description=loc['description'],
+                                        longitude=float(location['lng']),
+                                        latitude=float(location['lat'])
+                                    )
     fields = "temp,precipitation,humidity"
-    for f in fields.split(','):
-        para = Parameter(
-            name=f,
-            _location=location
-        )
-        add_parameter(para)
+    for field in fields.split(','):
+        add_parameter(location, field)
     return location
 
-def get_parameter_value(para):
-    print(para)
-    querystring['lat'] = para._location.latitude
-    querystring['lon'] = para._location.longitude
-    querystring['fields'] = para.name
+def get_parameter_value(lat, lng, field):
+    querystring['lat'] = lat
+    querystring['lon'] = lng
+    querystring['fields'] = field
     data = requests.get(API_URL, params=querystring).json()
     return data
 
-def add_parameter(para):
-    data = get_parameter_value(para)
+def add_parameter(location_obj, field):
+    data = get_parameter_value(location_obj.latitude, location_obj.longitude, field)
     values = []
     for p in data:
         v = {}
         v['observation_time'] = p['observation_time']['value']
-        v['value'] = p[para.name]['value']
+        v['value'] = p[field]['value']
         values.append(v)
-    para = Parameter(
-        name=para.name,
-        values=values,
-        unit=data[0][para.name]['units'],
-        _location=para._location
-    )
-    para.save()
+    para = Parameter.objects.create(_location=location_obj,
+                                    values=values,
+                                    name=field,
+                                    unit=data[0][field]['units']
+                                    )
     return para
-
 
 def aggregate(value):
     values = [d['value'] for d in value if d['value'] is not None]

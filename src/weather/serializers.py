@@ -14,7 +14,7 @@ class ParameterSerializer(serializers.ModelSerializer):
 
 class LocationSerializer(serializers.HyperlinkedModelSerializer):
     parameters = serializers.HyperlinkedIdentityField(view_name='weather:location-parameters-list', lookup_url_kwarg='location_pk')
-    aggregation = serializers.JSONField(default=dict, source="parameters.aggregation")
+    aggregation = serializers.JSONField(default=dict, source="parameters.aggregation", allow_null=True)
     class Meta:
         model = Location
         fields = ('id', 'name', 'description','longitude', 'latitude', 'aggregation', 'parameters')
