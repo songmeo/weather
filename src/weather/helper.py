@@ -33,10 +33,6 @@ def get_parameter_values(location):
             v['value'] = p[f]['value']
             values.append(v)
     return values
-'''
-def update_location(location):
-    return location
-'''
 
 def add_location(loc):
     location = [c for c in CITIES if(c['name'] == loc['name'])][0]

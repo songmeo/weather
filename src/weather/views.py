@@ -15,7 +15,8 @@ class LocationViewSet(viewsets.ModelViewSet):
     
 class ParameterViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
-        return Parameter.objects.filter(_location=self.kwargs['location_pk'])
+        paras = Parameter.objects.filter(_location=self.kwargs['location_pk'])
+        return paras
     serializer_class = ParameterSerializer
 
     def get_serializer_context(self):
