@@ -22,7 +22,7 @@ def add_location(loc):
     except:
         raise Http404("City not found")
     location = Location.objects.create(name=loc['name'],
-                                       description=loc['description'],
+                                       description=loc['description'] if loc['description'] else '',
                                        longitude=float(location['lng']),
                                        latitude=float(location['lat'])
                                       )
