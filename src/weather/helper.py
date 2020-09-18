@@ -28,7 +28,10 @@ def add_location(loc):
                                       )
     fields = "temp,precipitation,humidity"
     for field in fields.split(','):
-        add_parameter(location, field)
+        try:
+            add_parameter(location, field)
+        except RuntimeError:
+            pass
     return location
 
 # get parameter data from climacell
