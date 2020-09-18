@@ -38,9 +38,9 @@ def get_parameter_value(lat, lng, field):
     querystring['fields'] = field
     response = requests.get(API_URL, params=querystring)
     if response.status_code == 400:
-        raise RuntimeError("This parameter is not supported. Supported parameters are temp,precipitation,humidity,\
-                            feels_like,dewpoint,wind_speed,wind_gust,baro_pressure,wind_direction, \
-                            cloud_cover,cloud_ceiling,cloud_base,visibility,temp,precipitation,humidity")
+        raise RuntimeError("This parameter is not supported. Supported parameters are temp,precipitation,humidity,"
+                            "feels_like,dewpoint,wind_speed,wind_gust,baro_pressure,wind_direction,"
+                            "cloud_cover,cloud_ceiling,cloud_base,visibility,temp,precipitation,humidity")
     elif response.status_code == 429:
         raise RuntimeError("API calls exceeded")
     data = response.json()
