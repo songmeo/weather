@@ -3,7 +3,7 @@ from django.db import models
 
 class Location(models.Model):
     name = models.CharField(max_length=25, unique=True)
-    description = models.CharField(max_length=64, blank=True)
+    description = models.CharField(max_length=64, blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     latitude = models.FloatField(blank=True, null=True)
     class Meta:
