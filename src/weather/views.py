@@ -36,7 +36,7 @@ class ParameterViewSet(viewsets.ModelViewSet):
         loc = Location.objects.filter(id=location_pk)[0]
         try:
             para = add_parameter(loc, request.data['name'])
-            data = ParameterSerializer(para).data
+            data = ParameterSerializer(para, context={'request': request}).data
         except (RuntimeError, IntegrityError) as err:
             data = ErrorSerializer(err).data
         return Response(data)

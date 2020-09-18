@@ -20,6 +20,6 @@ class Parameter(models.Model):
                                 related_name="parameters"
                 )
     class Meta:
-        unique_together = (('name','_location'))  
+        unique_together = (('name','_location'))
     def __str__(self):
         return self.name
